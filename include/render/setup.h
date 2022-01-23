@@ -17,7 +17,7 @@ Application Setup(const int width, const int height, const char* title);
 
 void LoadGLFW(Application* app);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void LoadGLAD();
+void LoadGLAD(void);
 unsigned SetupRenderingScreen(Application* app);
 
 void CleanUp(Application* app);

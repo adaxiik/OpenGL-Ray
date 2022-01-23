@@ -14,9 +14,22 @@ void processInput(GLFWwindow *window);
 int main(void)
 {
     Application app = Setup(WIDTH,HEIGHT,"OpenGL go brr");
+    
+    glfwSwapInterval(1); //vsync
 
+
+    double lastTime = glfwGetTime();
+    int frames = 0;
     while (!glfwWindowShouldClose(app.window.window))
     {
+        double currentTime = glfwGetTime();
+        ++frames;
+        if(currentTime - lastTime >= 3.0){
+            //printf("%f ms/frame\n",1000.0/double(frames));
+            printf("%f ms / %i fps\n",3000.0/(double)frames,frames/3);
+            frames = 0;
+            lastTime += 3.0;
+        }
         glfwGetWindowSize(app.window.window, &app.window.width, &app.window.height);
         processInput(app.window.window);
         RenderScreen(&app);

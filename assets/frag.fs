@@ -1,6 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 uniform vec2 res;
+uniform float time;
+
 #define steps 128
 #define hitDist 0.01
 #define maxDist 100.0
@@ -62,7 +64,8 @@ void main()
 {
    vec2 uv = (gl_FragCoord.xy-.5*res)/res.y;
 
-   vec3 cameraPos = vec3(-3.0, 4.0, -5.0);
+   vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
+   
    vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0, 0.0), 0.7);
    FragColor = vec4(rayMarch(cameraPos,view), 1.0f);
 }

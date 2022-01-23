@@ -31,7 +31,7 @@ void LoadGLFW(Application* app){
     
 }
 
-void LoadGLAD(){
+void LoadGLAD(void){
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
