@@ -42,7 +42,7 @@ void LoadGLAD(void){
     }
 }
 
-unsigned SetupRenderingScreen(Application* app){
+void SetupRenderingScreen(Application* app){
      // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
@@ -108,7 +108,7 @@ Application Setup(const int width, const int height, const char* title){
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     
-    
+    (void)window;
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
