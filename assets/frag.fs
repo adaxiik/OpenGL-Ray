@@ -30,7 +30,8 @@ vec3 calculateNormal(vec3 p) {
 
 vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
    float distanceTraveled = 0.0;
-   vec3 lightPos = vec3(2.0, -5.0, 3.0);
+   vec3 lightPos = vec3(3.0*sin(time), 1.0, 4.0*cos(time));
+   vec3 color = vec3(1.0);
    for(int i = 0; i < steps; i++){
       if(distanceTraveled > maxDist){
          return vec3(0.0, 0.0, 0.0);
@@ -41,8 +42,19 @@ vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
       if(closestDistace < hitDist){
          vec3 normal = calculateNormal(currentPos);
          vec3 dirToLight = normalize(currentPos - lightPos);
-         float lightIntensity = max(dot(normal, dirToLight), 0.0);
-         return vec3(1.0)*lightIntensity;
+         float lightIntensity = max(dot(-normal, dirToLight), 0.0);
+         float lightDistanceTraveled = 0.0;   
+         // for(int j = 0; j < 64; j++){
+         //    vec3 currentLightRayPos = currentPos + 0.2 + dirToLight * lightDistanceTraveled;
+         //    float lightDist = map(currentLightRayPos);
+         //    if(lightDist < hitDist){
+         //       color -= vec3(0.6);
+         //       break;
+         //    }
+         //    lightDistanceTraveled += lightDist;
+         // }
+
+         return color*lightIntensity;
       }
 
       distanceTraveled += closestDistace;
@@ -64,7 +76,8 @@ void main()
 {
    vec2 uv = (gl_FragCoord.xy-.5*res)/res.y;
 
-   vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
+   //vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
+   vec3 cameraPos = vec3(4.0, 3.0, 3.0);
    
    vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0, 0.0), 0.7);
    FragColor = vec4(rayMarch(cameraPos,view), 1.0f);
