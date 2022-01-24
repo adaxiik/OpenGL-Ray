@@ -82,6 +82,10 @@ void CleanUp(Application* app){
     glDeleteBuffers(1, &app->VBO);
     glDeleteProgram(app->shaderProgram);
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    igDestroyContext(app->gui.ctx);
+
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
@@ -94,6 +98,7 @@ Application Setup(const int width, const int height, const char* title){
     strcpy(app.window.title, title);
     LoadGLFW(&app);
     LoadGLAD();
+    LoadGUI(&app);
     SetupRenderingScreen(&app);
     if((app.shaderProgram = CompileShaders("assets/vert.vs", "assets/frag.fs")) == 0){
         fprintf(stderr, "Failed to compile shaders\n");
@@ -112,4 +117,16 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+void LoadGUI(Application* app){
+    // IMGUI_CHECKVERSION();
+    app->gui.ctx = igCreateContext(NULL);
+    app->gui.io  = igGetIO();
+
+    const char* glsl_version = "#version 330 core";
+    ImGui_ImplGlfw_InitForOpenGL(app->window.window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    // Setup style
+    igStyleColorsDark(NULL);
 }

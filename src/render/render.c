@@ -14,7 +14,25 @@ void RenderScreen(Application *app){
     glDrawArrays(GL_TRIANGLES, 0, 3);
     // glBindVertexArray(0); // no need to unbind it every time 
 
-    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-    // -------------------------------------------------------------------------------
+    igRender();
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
+
+    glfwSwapBuffers(app->window.window);
+    glfwPollEvents();
     
+}
+void UpdateGUI(Application *app){
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    igNewFrame();
+
+    igBegin("Stats", NULL, 0);
+    igText("%f ms / %i fps\n",1000.0/(double)app->fps,app->fps);
+    //igButton("Test",(struct ImVec2){0,0});
+    igEnd();
+
+    // // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. 
+    // // Here we just want to make the demo initial state a bit more friendly!
+    // igSetNextWindowPos((struct ImVec2){0,0}, ImGuiCond_FirstUseEver,(struct ImVec2){0,0} ); 
+    //igShowDemoWindow(NULL);
 }
