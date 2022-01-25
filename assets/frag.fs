@@ -30,7 +30,8 @@ vec3 calculateNormal(vec3 p) {
 
 vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
    float distanceTraveled = 0.0;
-   vec3 lightPos = vec3(3.0*sin(time), 1.0, 4.0*cos(time));
+   vec3 lightPos = vec3(3.0*sin(time/2), 2.0, 4.0*cos(time/2));
+   //vec3 lightPos = vec3(1.0, 3.0, -4.0);
    vec3 color = vec3(1.0);
    for(int i = 0; i < steps; i++){
       if(distanceTraveled > maxDist){
@@ -43,16 +44,7 @@ vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
          vec3 normal = calculateNormal(currentPos);
          vec3 dirToLight = normalize(currentPos - lightPos);
          float lightIntensity = max(dot(-normal, dirToLight), 0.0);
-         float lightDistanceTraveled = 0.0;   
-         // for(int j = 0; j < 64; j++){
-         //    vec3 currentLightRayPos = currentPos + 0.2 + dirToLight * lightDistanceTraveled;
-         //    float lightDist = map(currentLightRayPos);
-         //    if(lightDist < hitDist){
-         //       color -= vec3(0.6);
-         //       break;
-         //    }
-         //    lightDistanceTraveled += lightDist;
-         // }
+         
 
          return color*lightIntensity;
       }
@@ -79,6 +71,6 @@ void main()
    //vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
    vec3 cameraPos = vec3(4.0, 3.0, 3.0);
    
-   vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0, 0.0), 0.7);
+   vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0,0.0), 0.7);
    FragColor = vec4(rayMarch(cameraPos,view), 1.0f);
 }
