@@ -28,6 +28,7 @@ void UpdateGUI(Application *app){
 
     igBegin("Stats", NULL, 0);
     igText("%f ms / %i fps\n",1000.0/(double)app->fps,app->fps);
+    igText("Resolution: %d x %d \n",app->window.width,app->window.height);
     //igButton("Test",(struct ImVec2){0,0});
     igEnd();
 

@@ -4,8 +4,15 @@ uniform vec2 res;
 uniform float time;
 
 #define steps 128
-#define hitDist 0.01
+#define hitDist 0.005
 #define maxDist 100.0
+
+float subtraction(float d1, float d2 ){   
+   return max(-d1,d2); 
+}
+float intersection( float d1, float d2 ){ 
+   return max(d1,d2); 
+}
 
 float sphere(vec3 point, vec3 coords, float radius) {
    return (length( point - coords) - radius);
@@ -15,9 +22,11 @@ float box(vec3 point, vec3 coords, vec3 size) {
 }
 
 float map(vec3 p) {
-   float sphere1 = sphere(p, vec3(0.0, 0.0, -2.0), 1.0);
+   float sphere1 = sphere(p, vec3(1.0, 1.0, -1.0), 1.0);
    float box1 = box(p, vec3(0.0, -0.5, 0), vec3(1.0));
-   return min(min(box1,p.y+0.5),sphere1);
+   //float box2 = box(p, vec3(1.0, -0.5, 0), vec3(1.0));
+   return min(subtraction(sphere1,box1),p.y+0.5);
+   //return subtraction(box1,box2);
 }
 vec3 calculateNormal(vec3 p) {
    vec2 step = vec2(0.001, 0.0);
@@ -30,8 +39,8 @@ vec3 calculateNormal(vec3 p) {
 
 vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
    float distanceTraveled = 0.0;
-   vec3 lightPos = vec3(3.0*sin(time/2), 2.0, 4.0*cos(time/2));
-   //vec3 lightPos = vec3(1.0, 3.0, -4.0);
+   //vec3 lightPos = vec3(3.0*sin(time/2), 2.0, 4.0*cos(time/2));
+   vec3 lightPos = vec3(3.0, 3.0, 1.0);
    vec3 color = vec3(1.0);
    for(int i = 0; i < steps; i++){
       if(distanceTraveled > maxDist){
@@ -68,8 +77,8 @@ void main()
 {
    vec2 uv = (gl_FragCoord.xy-.5*res)/res.y;
 
-   //vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
-   vec3 cameraPos = vec3(4.0, 3.0, 3.0);
+   vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
+   //vec3 cameraPos = vec3(4.0, 3.0, 3.0);
    
    vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0,0.0), 0.7);
    FragColor = vec4(rayMarch(cameraPos,view), 1.0f);

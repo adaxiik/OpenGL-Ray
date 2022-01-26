@@ -20,7 +20,7 @@ void processInput(GLFWwindow *window);
 int main(void)
 {
     Application app = Setup(WIDTH,HEIGHT,"OpenGL go brr");
-    glfwSwapInterval(1); //vsync
+    glfwSwapInterval(0); //vsync
     
     double lastTime = glfwGetTime();
     int frames = 0;
