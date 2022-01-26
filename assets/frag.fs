@@ -3,17 +3,27 @@ out vec4 FragColor;
 uniform vec2 res;
 uniform float time;
 
-#define steps 128
+#define steps 256
 #define hitDist 0.005
-#define maxDist 100.0
+#define maxDist 10000.0
 
+//https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
 float subtraction(float d1, float d2 ){   
    return max(-d1,d2); 
 }
 float intersection( float d1, float d2 ){ 
    return max(d1,d2); 
 }
+float smoothUnion( float d1, float d2, float k ) {
+   float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+   return mix( d2, d1, h ) - k*h*(1.0-h); 
+}
+float smoothSubtraction( float d1, float d2, float k ) {
+   float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );
+   return mix( d2, -d1, h ) + k*h*(1.0-h); 
+}   
 
+   
 float sphere(vec3 point, vec3 coords, float radius) {
    return (length( point - coords) - radius);
 }
@@ -22,11 +32,15 @@ float box(vec3 point, vec3 coords, vec3 size) {
 }
 
 float map(vec3 p) {
-   float sphere1 = sphere(p, vec3(1.0, 1.0, -1.0), 1.0);
-   float box1 = box(p, vec3(0.0, -0.5, 0), vec3(1.0));
+   vec3 c = vec3(5.0);
+   vec3 q = mod(p+0.5*c,c)-0.5*c; //infinite repetitions
+
+   float sphere1 = sphere(q, vec3(0.0, 0.0, 0.0), 1.0);
+   float box1 = box(q, vec3(0.0, 0.0, 0.0), vec3(1.0));
    //float box2 = box(p, vec3(1.0, -0.5, 0), vec3(1.0));
-   return min(subtraction(sphere1,box1),p.y+0.5);
+   //return min(smoothSubtraction(sphere1,box1,0.5),p.y+0.5);
    //return subtraction(box1,box2);
+   return sphere1;
 }
 vec3 calculateNormal(vec3 p) {
    vec2 step = vec2(0.001, 0.0);
@@ -54,8 +68,8 @@ vec3 rayMarch(vec3 rayOrigin, vec3 rayDirection){
          vec3 dirToLight = normalize(currentPos - lightPos);
          float lightIntensity = max(dot(-normal, dirToLight), 0.0);
          
-
-         return color*lightIntensity;
+         return normal;
+         //return color*lightIntensity;
       }
 
       distanceTraveled += closestDistace;
@@ -80,6 +94,6 @@ void main()
    vec3 cameraPos = vec3(5.0*sin(time), 3.0, 5*cos(time));
    //vec3 cameraPos = vec3(4.0, 3.0, 3.0);
    
-   vec3 view = lookAt(uv, cameraPos, vec3(0.0, 0.0,0.0), 0.7);
+   vec3 view = lookAt(uv, cameraPos, vec3(0.0, 3.0,0.0), 0.7);
    FragColor = vec4(rayMarch(cameraPos,view), 1.0f);
 }
