@@ -1,6 +1,7 @@
 #include "../../include/render/shader.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 unsigned CompileShaders(const char *vertex_shader_path, const char *fragment_shader_path){
     const char *vertexShaderSource = ReadFile(vertex_shader_path);
     const char *fragmentShaderSource = ReadFile(fragment_shader_path);
@@ -86,3 +87,37 @@ char *ReadFile(const char *path){
     fclose(fp);
     return buffer;
 }
+
+void Set1f(unsigned shaderProgram, const char *name, float a){
+    glUniform1f(glGetUniformLocation(shaderProgram, name), a);
+}
+
+void Set2f(unsigned shaderProgram, const char *name, float a, float b){
+    glUniform2f(glGetUniformLocation(shaderProgram, name), a, b);
+}
+
+void Set3f(unsigned shaderProgram, const char *name, float a, float b, float c){
+    glUniform3f(glGetUniformLocation(shaderProgram, name), a, b, c);
+}
+
+void Set4f(unsigned shaderProgram, const char *name, float a, float b, float c, float d){
+    glUniform4f(glGetUniformLocation(shaderProgram, name), a, b, c, d);
+}
+
+void Set1i(unsigned shaderProgram, const char *name, int a){
+    glUniform1i(glGetUniformLocation(shaderProgram, name), a);
+}
+
+void Set2i(unsigned shaderProgram, const char *name, int a, int b){
+    glUniform2i(glGetUniformLocation(shaderProgram, name), a, b);
+}
+
+void Set3i(unsigned shaderProgram, const char *name, int a, int b, int c){
+    glUniform3i(glGetUniformLocation(shaderProgram, name), a, b, c);
+}
+
+void Set4i(unsigned shaderProgram, const char *name, int a, int b, int c, int d){
+    glUniform4i(glGetUniformLocation(shaderProgram, name), a, b, c, d);
+}
+
+

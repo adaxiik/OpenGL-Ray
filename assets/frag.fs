@@ -7,6 +7,7 @@ uniform float time;
 #define hitDist 0.005
 #define maxDist 10000.0
 
+//borrowed few sd functions from there
 //https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
 float subtraction(float d1, float d2 ){   
    return max(-d1,d2); 
